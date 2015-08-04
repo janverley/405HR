@@ -1,17 +1,41 @@
 using Toybox.WatchUi as Ui;
+using Toybox.Activity as Activity;
 
-class HRView extends Ui.SimpleDataField {
+class HRView extends Ui.DataField 
+{
+	var zones;
+	var model;
+	var chart;
 
-    //! Set the label of the data field here.
-    function initialize() {
-        label = "My Label";
+    function initialize() 
+    {
+		Log("HRView.ctor");	
+
+		zones = new HRZones();
+		model = new HRModel(zones);
+    	chart = new Chart(model, zones);
     }
 
-    //! The given info object contains all the current workout
-    //! information. Calculate a value and return it in this method.
-    function compute(info) {
-        // See Activity.Info in the documentation for available information.
-        return 0.0;
+    function compute(info) 
+    {
+    	Log("HRview.compute");
+    
+		model.compute(info);
     }
 
+    function onLayout(dc) 
+    {
+    	Log("HRView.onLayout");
+    	chart.onLayout(dc); 
+
+    //Log(dc.getWidth());
+    //Log(dc.getHeight());
+    }
+
+	function onUpdate(dc) 
+	{
+    	Log("HRView.onUpdate");
+
+		chart.draw(dc);
+	}
 }
