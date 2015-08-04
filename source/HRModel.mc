@@ -5,8 +5,8 @@ using Toybox.Math as Math;
 class HRModel 
 {
 
-	var historySize = 40;
-	var jumpSize = 5;
+	var historySize = 60;
+	var jumpSize = 15;
 
 	var values = new [historySize];
 	var currentPosition = 0;
@@ -74,6 +74,12 @@ class HRModel
 			for(var i = jumpSize; i < values.size(); i++)
 			{
 				values[i - jumpSize] = values[i];
+			}
+			
+			// remove everything beyond
+			for(var i = values.size() - jumpSize; i < values.size(); i++)
+			{
+				values[i] = null;
 			}
 		}
 		

@@ -46,7 +46,7 @@ class Chart
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
 
-   		//dc.drawText(screenSize[0], screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+   		dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 
     	for (var x = 0; x < model.getHistorySize(); x++)
     	{
@@ -60,15 +60,17 @@ class Chart
     			//Log("val zone: " + zone.toString());
 
 		    	//Log("zones.getMax(zone): " + zones.getMax(zone));
-		    	//Log("zones.getMax(zone - 1): " + zones.getMax(zone - 1));
+		    	Log("zones.getMax(zone - 1): " + zones.getMax(zone - 1));
 	
     			var hrRangeZone = zones.getMax(zone) - zones.getMax(zone - 1);
     			//Log("hrRangeZone: " + hrRangeZone.toString());
     				
 				var rico = (screenSize[1] / 2)/(hrRangeZone).toFloat();
-    			//Log("rico: " + rico);
+    			Log("rico: " + rico);
 
-				var y = 1200 - (val * rico);
+				Log("val- zones.getMax(mainZone - 1): " + (val - zones.getMax(mainZone - 1)).toString());
+    			
+				var y = (screenSize[1] * 3 / 4 ) - ((val - zones.getMax(mainZone - 1)) * rico);
 				
 				Log("y: " + y.toString());
 
