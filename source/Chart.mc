@@ -10,7 +10,8 @@ class Chart
 	var zones;
 	var screenSize = new[2];
 
-	var xGraphOffset = 15;
+	var xGraphLeftOffset = 15;
+	var xGraphRightMargin = 0;
 	var blockWidth;
 
     function initialize(a_model, a_zones)
@@ -25,7 +26,7 @@ class Chart
    
 		screenSize[0] = dc.getWidth();
 		screenSize[1] = dc.getHeight();
-		blockWidth = (dc.getWidth() - xGraphOffset)/ ( model.getHistorySize() );
+		blockWidth = 2;//(screenSize[0] - xGraphLeftOffset - xGraphRightMargin)/ ( model.getHistorySize() );
     	Log("blockWidth:" + blockWidth);
     }
 
@@ -38,16 +39,32 @@ class Chart
     	Log("current zone: " + mainZone);
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
-        dc.drawText(10, screenSize[1]/2, Graphics.FONT_TINY, mainZone.toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 
+        if(mainZone < 5)
+        {
+        	dc.drawText(10, screenSize[1]*1/8, Graphics.FONT_TINY, (mainZone + 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+        }
+        dc.drawText(10, screenSize[1]/2, Graphics.FONT_TINY, mainZone.toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+        if(mainZone > 1)
+        {
+        	dc.drawText(10, screenSize[1]*7/8, Graphics.FONT_TINY, (mainZone - 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+		}
+		
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
 
-		dc.fillRectangle(xGraphOffset, screenSize[1]/4, screenSize[0] - xGraphOffset, screenSize[1]/2);
+		dc.fillRectangle(xGraphLeftOffset, screenSize[1]/4, screenSize[0] - xGraphLeftOffset, screenSize[1]/2);
 
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
 
-   		dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+		if(model.getCurrentHR() != null)
+		{
+	   		dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+		}
 
+		var yPrevious = null;
+
+		dc.setPenWidth(3);
+		
     	for (var x = 0; x < model.getHistorySize(); x++)
     	{
          	var val = model.getValues()[x];
@@ -74,7 +91,11 @@ class Chart
 				
 				Log("y: " + y.toString());
 
-				dc.drawLine(xGraphOffset + (x * blockWidth), y, xGraphOffset + (x * blockWidth) + blockWidth, y);            
+				if(yPrevious != null)
+				{
+					dc.drawLine(xGraphLeftOffset + (x * blockWidth), yPrevious, xGraphLeftOffset + (x * blockWidth) + blockWidth, y);            
+				}
+				yPrevious = y;
 
             }
     	}
