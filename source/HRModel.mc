@@ -7,6 +7,7 @@ class HRModel
 
 	var historySize = 80;
 	var jumpSize = 15;
+	var running = false;
 
 	var values = new [historySize];
 	var currentPosition = 0;
@@ -29,6 +30,11 @@ class HRModel
 		hrZones = a_hrZones;
     }
     
+    function getCurrentPosition()
+	{
+		return currentPosition;
+	}
+
     function getCurrentHR()
 	{
 		return current;
@@ -65,7 +71,17 @@ class HRModel
     
 		current = info.currentHeartRate;
 
-		updateStats();
+		if(current != null)
+		{
+			running = true;
+		}
+
+		if(!running)
+		{
+			return;
+		}
+
+		//updateStats();
 		
 		if(currentPosition == values.size())
 		{

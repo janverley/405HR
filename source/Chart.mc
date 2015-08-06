@@ -10,6 +10,9 @@ class Chart
 	var zones;
 	var screenSize = new[2];
 
+	var mainZone = 0;
+	var threshold = 3;
+
 	var xGraphLeftOffset = 15;
 	var xGraphRightMargin = 0;
 	var blockWidth;
@@ -34,7 +37,29 @@ class Chart
     {
     	Log("Chart.draw");
     
-		var mainZone = model.getCurrentHRZone();
+	    if(mainZone != model.getCurrentHRZone())
+	    {
+	    	// if the last [threshold] HR are in this zone, switch to that zone
+	    	var changeToNewZone = true;
+	    	for (var x = 1; x <= threshold; x++)
+	    	{
+	    		if(model.getCurrentPosition() - x >=0)
+	    		{
+	         		var pVal = model.getValues()[model.getCurrentPosition() - x ];
+	         		
+	         		Log("zones.getZone(pVal): " + (zones.getZone(pVal)).toString());
+	         		if(pVal != null && model.getCurrentHRZone() != zones.getZone(pVal))
+	         		{
+	         			changeToNewZone = false;	
+	         		}
+         		}
+			}    	
+			
+			if(changeToNewZone)
+			{
+				mainZone = model.getCurrentHRZone();
+	    	}
+	    }
 
     	Log("current zone: " + mainZone);
 
@@ -71,25 +96,25 @@ class Chart
           	if (val != null)
             {
 
-    			Log("val: " + val.toString());
+    			//Log("val: " + val.toString());
     			
     			var zone = zones.getZone(val);
     			//Log("val zone: " + zone.toString());
 
 		    	//Log("zones.getMax(zone): " + zones.getMax(zone));
-		    	Log("zones.getMax(zone - 1): " + zones.getMax(zone - 1));
+		    	//Log("zones.getMax(zone - 1): " + zones.getMax(zone - 1));
 	
     			var hrRangeZone = zones.getMax(zone) - zones.getMax(zone - 1);
     			//Log("hrRangeZone: " + hrRangeZone.toString());
     				
 				var rico = (screenSize[1] / 2)/(hrRangeZone).toFloat();
-    			Log("rico: " + rico);
+    			//Log("rico: " + rico);
 
-				Log("val- zones.getMax(mainZone - 1): " + (val - zones.getMax(mainZone - 1)).toString());
+				//Log("val- zones.getMax(mainZone - 1): " + (val - zones.getMax(mainZone - 1)).toString());
     			
 				var y = (screenSize[1] * 3 / 4 ) - ((val - zones.getMax(mainZone - 1)) * rico);
 				
-				Log("y: " + y.toString());
+				//Log("y: " + y.toString());
 
 				if(yPrevious != null)
 				{
