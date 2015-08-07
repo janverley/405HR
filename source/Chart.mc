@@ -7,20 +7,20 @@ using Toybox.Application as App;
 class Chart
 {
 	var model;
-	var zones;
+	var HRzones;
+
 	var screenSize = new[2];
 
 	var mainZone = 0;
 	var threshold = 3;
 
 	var xGraphLeftOffset = 15;
-	var xGraphRightMargin = 0;
 	var blockWidth;
 
-    function initialize(a_model, a_zones)
+    function initialize(a_model, a_HRzones)
     {
         model = a_model;
-        zones = a_zones;
+        HRzones = a_HRzones;
     }
 
     function onLayout(dc)
@@ -29,26 +29,28 @@ class Chart
    
 		screenSize[0] = dc.getWidth();
 		screenSize[1] = dc.getHeight();
-		blockWidth = 2;//(screenSize[0] - xGraphLeftOffset - xGraphRightMargin)/ ( model.getHistorySize() );
+		blockWidth = (screenSize[0] - xGraphLeftOffset)/ ( model.getHistorySize() );
     	Log("blockWidth:" + blockWidth);
     }
 
     function draw(dc)
     {
     	Log("Chart.draw");
-    
-	    if(mainZone != model.getCurrentHRZone())
+    	
+    	dc.clear();
+    	
+        if(mainZone != model.getCurrentHRZone())
 	    {
-	    	// if the last [threshold] HR are in this zone, switch to that zone
+	    	// if the last [threshold] HRs are all in this new zone, switch to it
 	    	var changeToNewZone = true;
 	    	for (var x = 1; x <= threshold; x++)
 	    	{
-	    		if(model.getCurrentPosition() - x >=0)
+	    		if( model.getCurrentPosition() - x >= 0)
 	    		{
 	         		var pVal = model.getValues()[model.getCurrentPosition() - x ];
 	         		
-	         		Log("zones.getZone(pVal): " + (zones.getZone(pVal)).toString());
-	         		if(pVal != null && model.getCurrentHRZone() != zones.getZone(pVal))
+	         		Log("HRzones.getZone(pVal): " + (HRzones.getZone(pVal)).toString());
+	         		if(pVal != null && model.getCurrentHRZone() != HRzones.getZone(pVal))
 	         		{
 	         			changeToNewZone = false;	
 	         		}
@@ -61,15 +63,15 @@ class Chart
 	    	}
 	    }
 
-    	Log("current zone: " + mainZone);
-
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
 
         if(mainZone < 5)
         {
         	dc.drawText(10, screenSize[1]*1/8, Graphics.FONT_TINY, (mainZone + 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
         }
+
         dc.drawText(10, screenSize[1]/2, Graphics.FONT_TINY, mainZone.toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+
         if(mainZone > 1)
         {
         	dc.drawText(10, screenSize[1]*7/8, Graphics.FONT_TINY, (mainZone - 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
@@ -86,42 +88,32 @@ class Chart
 	   		dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 		}
 
+		var hrRangeZone = HRzones.getMax(mainZone) - HRzones.getMax(mainZone - 1);
+    				
 		var yPrevious = null;
 
 		dc.setPenWidth(3);
 		
-    	for (var x = 0; x < model.getHistorySize(); x++)
+    	for (var i = 0; i < model.getHistorySize(); i++)
     	{
-         	var val = model.getValues()[x];
-          	if (val != null)
+         	var value = model.getValues()[i];
+          	if (value != null)
             {
-
-    			//Log("val: " + val.toString());
-    			
-    			var zone = zones.getZone(val);
-    			//Log("val zone: " + zone.toString());
-
-		    	//Log("zones.getMax(zone): " + zones.getMax(zone));
-		    	//Log("zones.getMax(zone - 1): " + zones.getMax(zone - 1));
+    			var zone = HRzones.getZone(value);
 	
-    			var hrRangeZone = zones.getMax(zone) - zones.getMax(zone - 1);
-    			//Log("hrRangeZone: " + hrRangeZone.toString());
-    				
 				var rico = (screenSize[1] / 2)/(hrRangeZone).toFloat();
-    			//Log("rico: " + rico);
 
-				//Log("val- zones.getMax(mainZone - 1): " + (val - zones.getMax(mainZone - 1)).toString());
-    			
-				var y = (screenSize[1] * 3 / 4 ) - ((val - zones.getMax(mainZone - 1)) * rico);
+				var y = (screenSize[1] * 3 / 4 ) - ( ( value - HRzones.getMax(mainZone - 1) ) * rico );
 				
-				//Log("y: " + y.toString());
-
+				//Log(rico + " " + y + " " + zone + " " + value);
+				
 				if(yPrevious != null)
 				{
-					dc.drawLine(xGraphLeftOffset + (x * blockWidth), yPrevious, xGraphLeftOffset + (x * blockWidth) + blockWidth, y);            
+					var x = xGraphLeftOffset + (i * blockWidth);
+					dc.drawLine(x, yPrevious, x + blockWidth, y);            
 				}
-				yPrevious = y;
 
+				yPrevious = y;
             }
     	}
 	}

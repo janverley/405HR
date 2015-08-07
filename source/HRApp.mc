@@ -1,18 +1,17 @@
 using Toybox.Application as App;
 
-class HRApp extends App.AppBase {
-
-    //! onStart() is called on application start up
-    function onStart() {
+class HRApp extends App.AppBase 
+{
+    function onStart() 
+    {
     }
 
-    //! onStop() is called when your application is exiting
-    function onStop() {
+    function onStop() 
+    {
     }
 
-    //! Return the initial view of your application here
-    function getInitialView() {
+    function getInitialView() 
+    {
         return [ new HRView() ];
     }
-
 }

@@ -26,10 +26,8 @@ class HRView extends Ui.DataField
     function onLayout(dc) 
     {
     	Log("HRView.onLayout");
-    	chart.onLayout(dc); 
 
-    //Log(dc.getWidth());
-    //Log(dc.getHeight());
+    	chart.onLayout(dc); 
     }
 
 	function onUpdate(dc) 
