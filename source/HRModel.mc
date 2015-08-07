@@ -11,7 +11,7 @@ class HRModel
 	var values = new [historySize];
 	var currentPosition = 0;
 
-	var receivedFirstValidHR = false;
+	var validHRReceived = false;
 	
 	var currentHR;
 
@@ -54,12 +54,7 @@ class HRModel
     
 		currentHR = info.currentHeartRate;
 		
-		if(currentHR != null)
-		{
-			receivedFirstValidHR = true;
-		}
-
-		if(!receivedFirstValidHR)
+		if(! validHRReceivedGuard(currentHR))
 		{
 			return;
 		}
@@ -85,5 +80,15 @@ class HRModel
 		currentPosition = currentPosition + 1;
 			
 		Log(values.toString());
+	}
+	
+	function validHRReceivedGuard(currentHR)
+	{
+		if(currentHR != null)
+		{
+			validHRReceived = true;
+		}
+
+		return validHRReceived;
 	}
 }

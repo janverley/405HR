@@ -37,9 +37,19 @@ class Chart
     {
     	Log("Chart.draw");
     	
-    	dc.clear();
-    	
-        if(mainZone != model.getCurrentHRZone())
+		evaluateMainZone();
+
+    	drawBackground(dc);
+		drawZoneLabels(dc);
+		drawCurrentHR(dc);
+		drawGraph(dc);
+
+	}
+
+	function evaluateMainZone()
+	{
+		if(model.getCurrentHR() != null && 
+		mainZone != model.getCurrentHRZone())
 	    {
 	    	// if the last [threshold] HRs are all in this new zone, switch to it
 	    	var changeToNewZone = true;
@@ -49,20 +59,34 @@ class Chart
 	    		{
 	         		var pVal = model.getValues()[model.getCurrentPosition() - x ];
 	         		
-	         		Log("HRzones.getZone(pVal): " + (HRzones.getZone(pVal)).toString());
-	         		if(pVal != null && model.getCurrentHRZone() != HRzones.getZone(pVal))
+	         		if(pVal != null)
 	         		{
-	         			changeToNewZone = false;	
+	         			Log("HRzones.getZone(pVal): " + (HRzones.getZone(pVal)).toString());
+	         			if(model.getCurrentHRZone() != HRzones.getZone(pVal))
+	         			{
+	         				changeToNewZone = false;	
+	         			}
 	         		}
          		}
-			}    	
+			}
 			
 			if(changeToNewZone)
 			{
 				mainZone = model.getCurrentHRZone();
 	    	}
 	    }
+	}
 
+	function drawBackground(dc)
+	{
+    	dc.clear();
+        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+
+		dc.fillRectangle(xGraphLeftOffset, screenSize[1]/4, screenSize[0] - xGraphLeftOffset, screenSize[1]/2);    	
+	}
+
+	function drawZoneLabels(dc)
+	{
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
 
         if(mainZone < 5)
@@ -76,23 +100,25 @@ class Chart
         {
         	dc.drawText(10, screenSize[1]*7/8, Graphics.FONT_TINY, (mainZone - 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 		}
-		
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+	}
 
-		dc.fillRectangle(xGraphLeftOffset, screenSize[1]/4, screenSize[0] - xGraphLeftOffset, screenSize[1]/2);
-
+	function drawCurrentHR(dc)
+	{
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);        
 
 		if(model.getCurrentHR() != null)
 		{
 	   		dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_TINY, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 		}
-
+	}
+	
+	function drawGraph(dc)
+	{
 		var hrRangeZone = HRzones.getMax(mainZone) - HRzones.getMax(mainZone - 1);
     				
 		var yPrevious = null;
 
-		dc.setPenWidth(3);
+		dc.setPenWidth(2);
 		
     	for (var i = 0; i < model.getHistorySize(); i++)
     	{
