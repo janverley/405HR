@@ -11,7 +11,7 @@ class HRView extends Ui.DataField
     {
         Log("HRView.ctor"); 
 
-        label = "405 HR";
+        //label = "405 HR";
 
         zones = new HRZones();
         model = new HRModel(zones);
