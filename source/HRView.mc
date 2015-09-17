@@ -7,21 +7,24 @@ class HRView extends Ui.DataField
     var model;
     var chart;
 
+    //var debug;
+
     function initialize() 
     {
         Log("HRView.ctor"); 
 
-        //label = "405 HR";
-
         zones = new HRZones();
         model = new HRModel(zones);
         chart = new Chart(model, zones);
+
+        //debug = new DebugDataGenerator();
     }
 
     function compute(info) 
     {
         Log("HRview.compute");
     
+        //model.compute(debug.getInfoReasonable(info));
         model.compute(info);
     }
 
