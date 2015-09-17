@@ -94,7 +94,7 @@ class Chart
             dc.drawText(10, screenSize[1]*1/8, Graphics.FONT_MEDIUM, (mainZone + 1).toString(), Graphics.TEXT_JUSTIFY_VCENTER);
         }
 
-        dc.drawText(10, screenSize[1]/2, Graphics.FONT_MEDIUM, mainZone.toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(13, screenSize[1]/2, Graphics.FONT_NUMBER_MILD, mainZone.toString(), Graphics.TEXT_JUSTIFY_VCENTER);
 
         if(mainZone > 1)
         {
@@ -108,7 +108,7 @@ class Chart
 
         if(model.getCurrentHR() != null)
         {
-            dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_LARGE, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(screenSize[0] - 3, screenSize[1]/2, Graphics.FONT_NUMBER_MEDIUM, model.getCurrentHR().toString(), Graphics.TEXT_JUSTIFY_VCENTER);
         }
     }
     
