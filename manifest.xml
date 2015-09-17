@@ -2,7 +2,6 @@
     <iq:application entry="HRApp" id="68A4D8A766AA46E5947DBE6AEBC443D1" launcherIcon="LauncherIcon" name="AppName" type="datafield">
 
         <iq:products>
-            <iq:product id="fenix3"/>
             <iq:product id="fr920xt"/>
         </iq:products>
 
