@@ -25,4 +25,4 @@ https://github.com/janverley/405HR/
 
 ## License
 
-Licensed under WTFPL
+Licensed under http://www.wtfpl.net/
