@@ -5,42 +5,42 @@ using Toybox.Math as Math;
 class HRModel 
 {
 
-	var historySize = 80;
-	var jumpSize = 15;
+    var historySize = 70;
+    var jumpSize = 10;
 
-	var values = new [historySize];
-	var currentPosition = 0;
+    var values = new [historySize];
+    var currentPosition = 0;
 
-	var validHRReceived = false;
-	
-	var currentHR;
+    var validHRReceived = false;
+    
+    var currentHR;
 
-	var hrZones;
-	
+    var hrZones;
+    
     function initialize(a_hrZones) 
     {
-		Log("HRModel.ctor");
-		hrZones = a_hrZones;
+        Log("HRModel.ctor");
+        hrZones = a_hrZones;
     }
     
     function getCurrentPosition()
-	{
-		return currentPosition;
-	}
+    {
+        return currentPosition;
+    }
 
     function getCurrentHR()
-	{
-		return currentHR;
-	}
+    {
+        return currentHR;
+    }
 
     function getCurrentHRZone()
-	{
-		return hrZones.getZone(currentHR);
-	}
+    {
+        return hrZones.getZone(currentHR);
+    }
 
     function getHistorySize() 
     {
-    	return historySize;
+        return historySize;
     }
     
     function getValues() 
@@ -50,45 +50,45 @@ class HRModel
 
     function compute(info) 
     {
-    	Log("compute");
+        Log("compute");
     
-		currentHR = info.currentHeartRate;
-		
-		if(! validHRReceivedGuard(currentHR))
-		{
-			return;
-		}
+        currentHR = info.currentHeartRate;
+        
+        if(! validHRReceivedGuard(currentHR))
+        {
+            return;
+        }
 
-		// jump
-		if(currentPosition == values.size())
-		{
-			currentPosition -= jumpSize;
-			
-			for(var i = jumpSize; i < values.size(); i++)
-			{
-				values[i - jumpSize] = values[i];
-			}
-			
-			// clear everything beyond jump
-			for(var i = values.size() - jumpSize; i < values.size(); i++)
-			{
-				values[i] = null;
-			}
-		}
-		
-		values[currentPosition] = currentHR;
-		currentPosition = currentPosition + 1;
-			
-		Log(values.toString());
-	}
-	
-	function validHRReceivedGuard(currentHR)
-	{
-		if(currentHR != null)
-		{
-			validHRReceived = true;
-		}
+        // jump
+        if(currentPosition == values.size())
+        {
+            currentPosition -= jumpSize;
+            
+            for(var i = jumpSize; i < values.size(); i++)
+            {
+                values[i - jumpSize] = values[i];
+            }
+            
+            // clear everything beyond jump
+            for(var i = values.size() - jumpSize; i < values.size(); i++)
+            {
+                values[i] = null;
+            }
+        }
+        
+        values[currentPosition] = currentHR;
+        currentPosition = currentPosition + 1;
+            
+        Log(values.toString());
+    }
+    
+    function validHRReceivedGuard(currentHR)
+    {
+        if(currentHR != null)
+        {
+            validHRReceived = true;
+        }
 
-		return validHRReceived;
-	}
+        return validHRReceived;
+    }
 }
