@@ -3,6 +3,9 @@ _Forerunner 405 styled HR graph Connect IQ Data Field for the Garmin Forerunner 
 
 I missed the heart rate graph of the Forerunner 405 I had before on the Forerunner 920XT.
 
+![1 Field](resources/images/1Field.png)
+![2 Fields](resources/images/2Fields.png)
+
 ## Credits
 I peeked at another chart implementation to get started:  
 https://github.com/simonmacmullen/chart-datafields.git
