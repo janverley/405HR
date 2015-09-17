@@ -5,8 +5,8 @@ using Toybox.Math as Math;
 class HRModel 
 {
 
-    var historySize = 75;
-    var jumpSize = 15;
+    var historySize = 70;
+    var jumpSize = 10;
 
     var values = new [historySize];
     var currentPosition = 0;
