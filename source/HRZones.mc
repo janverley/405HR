@@ -26,19 +26,19 @@ class HRZones
         
         if(heartRate != null)
         {
-            if(heartRate <= upperLimits[1])
+            if(heartRate < upperLimits[1])
             {
                 result = 1; 
             }
-            else if(heartRate <= upperLimits[2])
+            else if(heartRate < upperLimits[2])
             {
                 result = 2;
             }
-            else if(heartRate <= upperLimits[3])
+            else if(heartRate < upperLimits[3])
             {
                 result = 3;
             }
-            else if(heartRate <= upperLimits[4])
+            else if(heartRate < upperLimits[4])
             {
                 result = 4;
             }
