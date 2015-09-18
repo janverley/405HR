@@ -7,7 +7,7 @@ class HRZones
     //  Zone
     //      <-      1       2       3       4       5       ->
 
-    var upperLimits = new[5];
+    var upperLimits = new[6];
 
     function initialize() 
     {
@@ -18,6 +18,7 @@ class HRZones
         upperLimits[2] = 145;
         upperLimits[3] = 160;
         upperLimits[4] = 170;       
+        upperLimits[5] = 250;       
     }
 
     function getZone(heartRate)
@@ -56,10 +57,6 @@ class HRZones
         if(zone < 0)
         {
             return 0;
-        }
-        else if(zone > 4)
-        {
-            return 220;
         }
         else
         {
